@@ -8,10 +8,7 @@ function getStringLength(value) {
 function isString(value) {
   return typeof value === 'string';
 }
-function concatenateStrings(value1, value2) {
-  value1 = value1 ?? '';
-  value2 = value2 ?? '';
-
+function concatenateStrings(value1 = '', value2 = '') {
   return value1 + value2;
 }
 function getFirstChar(value) {
@@ -52,7 +49,7 @@ function repeatString(str, times) {
   }
 
   let result = '';
-  for (let i = 0; i < times; i++) {
+  for (let i = 0; i < times; i += 1) {
     result += str;
   }
   return result;
@@ -88,15 +85,16 @@ function sumOfCodes(str) {
     return 0;
   }
 
-  let sum = 0;
-  for (const char of str) {
-    sum += char.codePointAt(0);
-  }
-
-  return sum;
+  const codePoints = [...str].map((char) => char.codePointAt(0));
+  return codePoints.reduce((sum, codePoint) => sum + codePoint, 0);
 }
 function startsWith(str, substr) {
-  if (str === null || str === undefined || substr === null || substr === undefined) {
+  if (
+    str === null ||
+    str === undefined ||
+    substr === null ||
+    substr === undefined
+  ) {
     return false;
   }
 
@@ -106,7 +104,12 @@ function startsWith(str, substr) {
   return str.substring(0, substr.length) === substr;
 }
 function endsWith(str, substr) {
-  if (str === null || str === undefined || substr === null || substr === undefined) {
+  if (
+    str === null ||
+    str === undefined ||
+    substr === null ||
+    substr === undefined
+  ) {
     return false;
   }
 
@@ -117,10 +120,18 @@ function endsWith(str, substr) {
   return str.substring(str.length - substr.length) === substr;
 }
 function formatTime(minutes, seconds) {
-  if (typeof minutes !== 'number' || minutes < 0 || Math.floor(minutes) !== minutes) {
+  if (
+    typeof minutes !== 'number' ||
+    minutes < 0 ||
+    Math.floor(minutes) !== minutes
+  ) {
     throw new Error('Invalid minutes value');
   }
-  if (typeof seconds !== 'number' || seconds < 0 || Math.floor(seconds) !== seconds) {
+  if (
+    typeof seconds !== 'number' ||
+    seconds < 0 ||
+    Math.floor(seconds) !== seconds
+  ) {
     throw new Error('Invalid seconds value');
   }
   const formattedMinutes = minutes.toString().padStart(2, '0');
@@ -153,15 +164,8 @@ function countVowels(str) {
   if (str === null || str === undefined) {
     return 0;
   }
-
   const vowels = new Set('aeiouAEIOUY');
-
-  let vowelCount = 0;
-  for (const char of str) {
-    if (vowels.has(char)) {
-      vowelCount++;
-    }
-  }
+  const vowelCount = [...str].filter((char) => vowels.has(char)).length;
 
   return vowelCount;
 }
@@ -170,15 +174,11 @@ function isPalindrome(str) {
     return false;
   }
 
-  const processedStr = str
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, '');
+  const processedStr = str.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const processedStrLength = processedStr.length;
 
-  let left = 0;
-  let right = processedStr.length - 1;
-
-  while (left < right) {
-    if (processedStr[left++] !== processedStr[right--]) {
+  for (let i = 0; i < processedStrLength; i += 1) {
+    if (processedStr[i] !== processedStr[processedStrLength - 1 - i]) {
       return false;
     }
   }
@@ -192,21 +192,18 @@ function findLongestWord(sentence) {
 
   const words = sentence.split(/\s+/);
 
-  let longestWord = '';
-  for (const word of words) {
-    if (word.length > longestWord.length) {
-      longestWord = word;
-    }
-  }
-
-  return longestWord;
+  return words.reduce(
+    (longestWord, word) =>
+      word.length > longestWord.length ? word : longestWord,
+    ''
+  );
 }
 function reverseWords(str) {
   if (!str) {
     return '';
   }
   const words = str.split(/\s+/);
-  const reversedWords = words.map(word => word.split('').reverse().join(''));
+  const reversedWords = words.map((word) => word.split('').reverse().join(''));
 
   return reversedWords.join(' ');
 }
@@ -215,7 +212,9 @@ function invertCase(str) {
     return str;
   }
 
-  return str.replace(/[a-z]/gi, char => char.toUpperCase()).replace(/[A-Z]/gi, char => char.toLowerCase());
+  return str
+    .replace(/[a-z]/gi, (char) => char.toUpperCase())
+    .replace(/[A-Z]/gi, (char) => char.toLowerCase());
 }
 function getStringFromTemplate(firstName, lastName) {
   return `Hello, ${firstName} ${lastName}!`;
@@ -239,29 +238,74 @@ function extractEmails(str) {
   if (!str) {
     return [];
   }
-  return str.split(/;(?=(?:[^"]*"[^"]*")*(?![^"]*"))/)
-    .map(email => email.trim())
-    .filter(email => email.length > 0);
+  return str
+    .split(/;(?=(?:[^"]*"[^"]*")*(?![^"]*"))/)
+    .map((email) => email.trim())
+    .filter((email) => email.length > 0);
 }
 function encodeToRot13(str) {
   if (!str) {
     return '';
   }
   const rot13Map = new Map([
-    ['a', 'n'], ['b', 'o'], ['c', 'p'], ['d', 'q'], ['e', 'r'],
-    ['f', 's'], ['g', 't'], ['h', 'u'], ['i', 'v'], ['j', 'w'],
-    ['k', 'x'], ['l', 'y'], ['m', 'z'], ['n', 'a'], ['o', 'b'],
-    ['p', 'c'], ['q', 'd'], ['r', 'e'], ['s', 'f'], ['t', 'g'],
-    ['u', 'h'], ['v', 'i'], ['w', 'j'], ['x', 'k'], ['y', 'l'],
-    ['z', 'm'], ['A', 'N'], ['B', 'O'], ['C', 'P'], ['D', 'Q'],
-    ['E', 'R'], ['F', 'S'], ['G', 'T'], ['H', 'U'], ['I', 'V'],
-    ['J', 'W'], ['K', 'X'], ['L', 'Y'], ['M', 'Z'], ['N', 'A'],
-    ['O', 'B'], ['P', 'C'], ['Q', 'D'], ['R', 'E'], ['S', 'F'],
-    ['T', 'G'], ['U', 'H'], ['V', 'I'], ['W', 'J'], ['X', 'K'],
-    ['Y', 'L'], ['Z', 'M']
+    ['a', 'n'],
+    ['b', 'o'],
+    ['c', 'p'],
+    ['d', 'q'],
+    ['e', 'r'],
+    ['f', 's'],
+    ['g', 't'],
+    ['h', 'u'],
+    ['i', 'v'],
+    ['j', 'w'],
+    ['k', 'x'],
+    ['l', 'y'],
+    ['m', 'z'],
+    ['n', 'a'],
+    ['o', 'b'],
+    ['p', 'c'],
+    ['q', 'd'],
+    ['r', 'e'],
+    ['s', 'f'],
+    ['t', 'g'],
+    ['u', 'h'],
+    ['v', 'i'],
+    ['w', 'j'],
+    ['x', 'k'],
+    ['y', 'l'],
+    ['z', 'm'],
+    ['A', 'N'],
+    ['B', 'O'],
+    ['C', 'P'],
+    ['D', 'Q'],
+    ['E', 'R'],
+    ['F', 'S'],
+    ['G', 'T'],
+    ['H', 'U'],
+    ['I', 'V'],
+    ['J', 'W'],
+    ['K', 'X'],
+    ['L', 'Y'],
+    ['M', 'Z'],
+    ['N', 'A'],
+    ['O', 'B'],
+    ['P', 'C'],
+    ['Q', 'D'],
+    ['R', 'E'],
+    ['S', 'F'],
+    ['T', 'G'],
+    ['U', 'H'],
+    ['V', 'I'],
+    ['W', 'J'],
+    ['X', 'K'],
+    ['Y', 'L'],
+    ['Z', 'M'],
   ]);
 
-  return str.split('').map(char => rot13Map.get(char) || char).join('');
+  return str
+    .split('')
+    .map((char) => rot13Map.get(char) || char)
+    .join('');
 }
 function getCardId(value) {
   if (!value || value.length !== 2) {
@@ -270,25 +314,25 @@ function getCardId(value) {
   const rank = value[0];
   const suit = value[1];
   const rankValues = {
-    'A': 0,
-    '2': 1,
-    '3': 2,
-    '4': 3,
-    '5': 4,
-    '6': 5,
-    '7': 6,
-    '8': 7,
-    '9': 8,
-    '10': 9,
-    'J': 10,
-    'Q': 11,
-    'K': 12
+    A: 0,
+    2: 1,
+    3: 2,
+    4: 3,
+    5: 4,
+    6: 5,
+    7: 6,
+    8: 7,
+    9: 8,
+    10: 9,
+    J: 10,
+    Q: 11,
+    K: 12,
   };
   const suitGroups = {
     '♣': 0,
     '♦': 1,
     '♥': 2,
-    '♠': 3
+    '♠': 3,
   };
   const rankIndex = rankValues[rank];
   const suitIndex = suitGroups[suit];
