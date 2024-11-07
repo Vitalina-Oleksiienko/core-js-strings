@@ -22,10 +22,22 @@ function getStringLength(value) {
 function isString(value) {
   return typeof value === 'string' || value instanceof String;
 }
-
+/**
+ * Returns the result of concatenation of two strings.
+ *
+ * @param {string} value1 - The first string to concatenate.
+ * @param {string} value2 - The second string to concatenate.
+ * @return {string} - The concatenated string.
+ *
+ * @example
+ *   concatenateStrings('aa', 'bb') => 'aabb'
+ *   concatenateStrings('aa', '') => 'aa'.
+ *   concatenateStrings('', 'bb') => 'bb'
+ */
 function concatenateStrings(value1 = '', value2 = '') {
-  return value1 + value2;
+  return value1.concat(value2);
 }
+
 function getFirstChar(value) {
   if (value === null || value === undefined || value === '') {
     return '';
@@ -40,20 +52,44 @@ function removeLeadingAndTrailingWhitespaces(value) {
 
   return value.trim();
 }
+/**
+ * Removes only leading whitespace characters from the string.
+ *
+ * @param {string} value - The input string to remove leading whitespaces from.
+ * @return {string} - The string with leading whitespaces removed.
+ *
+ * @example
+ *   removeLeadingWhitespaces('  Abracadabra') => 'Abracadabra'
+ *   removeLeadingWhitespaces('cat ') => 'cat '
+ *   removeLeadingWhitespaces('\t\t\tHello, World! ') => 'Hello, World! '
+ */
 function removeLeadingWhitespaces(value) {
-  if (value === null || value === undefined) {
+  if (typeof value !== 'string') {
     return '';
   }
 
-  return value.replace(/^\s+/, '');
+  return value.trimStart();
 }
+
+/**
+ * Removes only trailing whitespace characters from the string.
+ *
+ * @param {string} value - The input string to remove trailing whitespaces from.
+ * @return {string} - The string with trailing whitespaces removed.
+ *
+ * @example
+ *   removeTrailingWhitespaces('  Abracadabra') => '  Abracadabra'
+ *   removeTrailingWhitespaces('cat ') => 'cat'
+ *   removeTrailingWhitespaces('\t\t\tHello, World! ') => '\t\t\tHello, World!'
+ */
 function removeTrailingWhitespaces(value) {
-  if (value === null || value === undefined) {
+  if (typeof value !== 'string') {
     return '';
   }
 
-  return value.replace(/\s+$/, '');
+  return value.trimEnd();
 }
+
 function repeatString(str, times) {
   if (str === null || str === undefined || times <= 0) {
     return '';
@@ -230,22 +266,22 @@ function containsSubstring(str, substring) {
  *   countVowels('XYZ') => 1
  */
 function countVowels(str) {
-  if (typeof str !== 'string') {
-    return 0;
-  }
-
-  const vowels = 'aeiouAEIOUY';
-  let count = 0;
-
-  for (let i = 0; i < str.length; i += 1) {
-    if (vowels.includes(str[i])) {
-      count += 1;
-    }
-  }
-
-  return count;
+  const vowels = 'aeiouyAEIOUY';
+  return str.split('').filter((char) => vowels.includes(char)).length;
 }
-
+/**
+ * Returns true if the string is a palindrome; otherwise false.
+ * https://en.wikipedia.org/wiki/Palindrome
+ *
+ * @param {string} str - The input string.
+ * @return {bool} - True if the string is a palindrome, false otherwise.
+ *
+ * @example:
+ *   isPalindrome('madam') => true
+ *   isPalindrome('racecar') => true
+ *   isPalindrome('apple') => false
+ *   isPalindrome('No lemon, no melon') => true
+ */
 function isPalindrome(str) {
   if (str === null || str === undefined || str.length === 0) {
     return false;
@@ -262,6 +298,18 @@ function isPalindrome(str) {
 
   return true;
 }
+/**
+ * Find the longest word in the sentence. If there are multiple longest words,
+ * the function returns the first one encountered.
+ *
+ * @param {string} sentence - The input sentence.
+ * @returns {string} - The longest word in the sentence.
+ *
+ * @example:
+ *   findLongestWord('The quick brown fox') => 'quick'
+ *   findLongestWord('A long and winding road') => 'winding'
+ *   findLongestWord('No words here') => 'words'
+ */
 function findLongestWord(sentence) {
   if (!sentence) {
     return '';
@@ -275,6 +323,16 @@ function findLongestWord(sentence) {
     ''
   );
 }
+/**
+ * Returns the string where each word is reversed.
+ *
+ * @param {string} str - The input string.
+ * @return {string} - The string where each word is reversed.
+ *
+ * @example:
+ *   reverseWords('Hello World') => 'olleH dlroW'
+ *   reverseWords('The Quick Brown Fox') => 'ehT kciuQ nworB xoF'
+ */
 function reverseWords(str) {
   if (!str) {
     return '';
@@ -284,26 +342,51 @@ function reverseWords(str) {
 
   return reversedWords.join(' ');
 }
+/**
+ * Inverts the case of each character in the given string.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} - The string with the case of each character inverted.
+ *
+ * @example
+ *   invertCase('Hello, World!') =>  'hELLO, wORLD!'
+ *   invertCase('JavaScript is Fun') => 'jAVAsCRIPT IS fUN'
+ *   invertCase('12345') => '12345'
+ */
 function invertCase(str) {
   if (str === null || str === undefined) {
     return str;
   }
 
-  return str
-    .replace(/[a-z]/gi, (char) => char.toUpperCase())
-    .replace(/[A-Z]/gi, (char) => char.toLowerCase());
+  return [...str]
+    .map((char) =>
+      char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase()
+    )
+    .join('');
 }
+
 function getStringFromTemplate(firstName, lastName) {
   return `Hello, ${firstName} ${lastName}!`;
 }
+/**
+ * Extracts a name from template string 'Hello, First_Name Last_Name!'.
+ *
+ * @param {string} value - The input value.
+ * @return {string} - The name extracted from the template.
+ *
+ * @example
+ *   extractNameFromTemplate('Hello, John Doe!') => 'John Doe'
+ *   extractNameFromTemplate('Hello, Chuck Norris!') => 'Chuck Norris'
+ */
 function extractNameFromTemplate(value) {
   if (!value) {
     return '';
   }
-  const match = value.match(/Hello,\s(.*?)\s!/);
 
+  const match = value.match(/^Hello, (.+)!$/);
   return match ? match[1] : '';
 }
+
 function unbracketTag(str) {
   if (!str || str.length < 2 || str[0] !== '<' || str[str.length - 1] !== '>') {
     return str;
@@ -384,36 +467,90 @@ function encodeToRot13(str) {
     .map((char) => rot13Map.get(char) || char)
     .join('');
 }
+/**
+ * Returns playid card id.
+ *
+ * Playing cards initial deck includes the cards in the following order:
+ *
+ *  'A♣','2♣','3♣','4♣','5♣','6♣','7♣','8♣','9♣','10♣','J♣','Q♣','K♣',
+ *  'A♦','2♦','3♦','4♦','5♦','6♦','7♦','8♦','9♦','10♦','J♦','Q♦','K♦',
+ *  'A♥','2♥','3♥','4♥','5♥','6♥','7♥','8♥','9♥','10♥','J♥','Q♥','K♥',
+ *  'A♠','2♠','3♠','4♠','5♠','6♠','7♠','8♠','9♠','10♠','J♠','Q♠','K♠'
+ *
+ * (see https://en.wikipedia.org/wiki/Standard_52-card_deck)
+ * Function returns the zero-based index of specified card in the initial deck above.
+ *
+ * @param {string} value - The card value.
+ * @return {number} - The zero-based index.
+ *
+ * @example
+ *   'A♣' => 0
+ *   '2♣' => 1
+ *   '3♣' => 2
+ *     ...
+ *   'Q♠' => 50
+ *   'K♠' => 51
+ */
+// function getCardId(value) {
+//   if (!value || value.length !== 2) {
+//     return -1;
+//   }
+//   const rank = value[0];
+//   const suit = value[1];
+//   const rankValues = {
+//     A: 13,
+//     2: 1,
+//     3: 2,
+//     4: 3,
+//     5: 4,
+//     6: 5,
+//     7: 6,
+//     8: 7,
+//     9: 8,
+//     10: 9,
+//     J: 10,
+//     Q: 11,
+//     K: 12,
+//   };
+//   const suitGroups = {
+//     '♠': 0,
+//     '♥': 1,
+//     '♦': 2,
+//     '♣': 3,
+//   };
+//   const rankIndex = rankValues[rank];
+//   const suitIndex = suitGroups[suit];
+//   return rankIndex * 4 + suitIndex;
+// }
 function getCardId(value) {
-  if (!value || value.length !== 2) {
-    return -1;
+  const rankArray = [
+    'A',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    'J',
+    'Q',
+    'K',
+  ];
+  const suitArray = ['♣', '♦', '♥', '♠'];
+
+  const suit = value.slice(-1);
+  const rank = value.slice(0, -1);
+
+  const rankIndex = rankArray.indexOf(rank);
+  const suitIndex = suitArray.indexOf(suit);
+
+  if (rankIndex === -1 || suitIndex === -1) {
+    throw new Error(`Invalid card: ${value}`);
   }
-  const rank = value[0];
-  const suit = value[1];
-  const rankValues = {
-    A: 13,
-    2: 1,
-    3: 2,
-    4: 3,
-    5: 4,
-    6: 5,
-    7: 6,
-    8: 7,
-    9: 8,
-    10: 9,
-    J: 10,
-    Q: 11,
-    K: 12,
-  };
-  const suitGroups = {
-    '♠': 0,
-    '♥': 1,
-    '♦': 2,
-    '♣': 3,
-  };
-  const rankIndex = rankValues[rank];
-  const suitIndex = suitGroups[suit];
-  return rankIndex * 4 + suitIndex;
+
+  return suitIndex * 13 + rankIndex;
 }
 
 module.exports = {
