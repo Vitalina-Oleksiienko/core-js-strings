@@ -5,9 +5,24 @@ function getStringLength(value) {
 
   return value.length;
 }
+/**
+ * Returns true if the value is a string, otherwise returns false.
+ *
+ * @param {string} value - The value to check if it's a string.
+ * @return {boolean} - True if the value is a string, false otherwise.
+ *
+ * @example
+ *   isString() => false
+ *   isString(null) => false
+ *   isString([]) => false
+ *   isString({}) => false
+ *   isString('test') => true
+ *   isString(new String('test')) => true
+ */
 function isString(value) {
-  return typeof value === 'string';
+  return typeof value === 'string' || value instanceof String;
 }
+
 function concatenateStrings(value1 = '', value2 = '') {
   return value1 + value2;
 }
@@ -80,45 +95,68 @@ function removeLastOccurrences(str, value) {
 
   return str.slice(0, index) + str.slice(index + value.length);
 }
+/**
+ * Calculate the sum of character codes of the given string.
+ *
+ * @param {string} str - The input string.
+ * @return {number} - The sum of character codes of the string.
+ *
+ * @example
+ *   sumOfCodes('My String') => 861 (77 + 121 + 32 + 83 + 116 + 114 + 105 + 110 + 103 = 861)
+ *   sumOfCodes('12345') => 255 (49 + 50 + 51 + 52 + 53 = 255)
+ *   sumOfCodes('') => 0
+ *   sumOfCodes() => 0
+ */
 function sumOfCodes(str) {
-  if (str === null || str === undefined || str === '') {
+  if (typeof str !== 'string' || str === '') {
     return 0;
   }
 
-  const codePoints = [...str].map((char) => char.codePointAt(0));
-  return codePoints.reduce((sum, codePoint) => sum + codePoint, 0);
+  let sum = 0;
+  for (let i = 0; i < str.length; i += 1) {
+    sum += str.charCodeAt(i);
+  }
+
+  return sum;
 }
+
+/**
+ * Checks if a string starts with a specific substring.
+ *
+ * @param {string} str - The input string.
+ * @param {string} substr - The substring to check.
+ * @return {boolean} - Returns true if str starts with substr, false otherwise.
+ *
+ * @example:
+ *   startsWith('Hello World', 'World') => false
+ *   startsWith('Hello World', 'Hello') => true
+ */
 function startsWith(str, substr) {
-  if (
-    str === null ||
-    str === undefined ||
-    substr === null ||
-    substr === undefined
-  ) {
+  if (typeof str !== 'string' || typeof substr !== 'string') {
     return false;
   }
 
-  if (substr.length > str.length) {
-    return false;
-  }
-  return str.substring(0, substr.length) === substr;
+  return str.startsWith(substr);
 }
+/**
+ * Checks if a string ends with a specific substring.
+ *
+ * @param {string} str - The input string.
+ * @param {string} substr - The substring to check.
+ * @return {boolean} - Returns true if str starts with substr, false otherwise.
+ *
+ * @example:
+ *   endsWith('Hello World', 'World') => true
+ *   endsWith('Hello World', 'Hello') => false
+ */
 function endsWith(str, substr) {
-  if (
-    str === null ||
-    str === undefined ||
-    substr === null ||
-    substr === undefined
-  ) {
+  if (typeof str !== 'string' || typeof substr !== 'string') {
     return false;
   }
 
-  if (substr.length > str.length) {
-    return false;
-  }
-
-  return str.substring(str.length - substr.length) === substr;
+  return str.endsWith(substr);
 }
+
 function formatTime(minutes, seconds) {
   if (
     typeof minutes !== 'number' ||
@@ -157,18 +195,57 @@ function orderAlphabetically(str) {
 
   return chars.join('');
 }
-function containsSubstring(/* str, substring */) {
-  throw new Error('Not implemented');
+
+/**
+ * Checks if a given string contains a specified substring.
+ *
+ * @param {string} str - The input string to search within.
+ * @param {string} substring - The substring to check for in the input string.
+ * @returns {boolean} - True if the input string contains the specified substring, false otherwise.
+ *
+ * @example
+ *   containsSubstring('Hello, World!', 'World') => true
+ *   containsSubstring('JavaScript is Fun', 'Python') => false
+ *   containsSubstring('12345', '34') => true
+ */
+function containsSubstring(str, substring) {
+  if (typeof str !== 'string' || typeof substring !== 'string') {
+    return false;
+  }
+
+  return str.includes(substring);
 }
+/**
+ * Returns the number of vowels in the string.
+ * Vowels: 'a', 'e', 'i', 'o', 'u', 'y', 'A', 'E', 'I', 'O', 'U', 'Y'.
+ *
+ * @param {string} str - The input string.
+ * @return {number} - The number of vowels in the string.
+ *
+ * @example:
+ *   countVowels('apple')  => 2
+ *   countVowels('banana') => 3
+ *   countVowels('cherry') => 2
+ *   countVowels('aEiOu') => 5
+ *   countVowels('XYZ') => 1
+ */
 function countVowels(str) {
-  if (str === null || str === undefined) {
+  if (typeof str !== 'string') {
     return 0;
   }
-  const vowels = new Set('aeiouAEIOUY');
-  const vowelCount = [...str].filter((char) => vowels.has(char)).length;
 
-  return vowelCount;
+  const vowels = 'aeiouAEIOUY';
+  let count = 0;
+
+  for (let i = 0; i < str.length; i += 1) {
+    if (vowels.includes(str[i])) {
+      count += 1;
+    }
+  }
+
+  return count;
 }
+
 function isPalindrome(str) {
   if (str === null || str === undefined || str.length === 0) {
     return false;
@@ -314,7 +391,7 @@ function getCardId(value) {
   const rank = value[0];
   const suit = value[1];
   const rankValues = {
-    A: 0,
+    A: 13,
     2: 1,
     3: 2,
     4: 3,
@@ -329,10 +406,10 @@ function getCardId(value) {
     K: 12,
   };
   const suitGroups = {
-    '♣': 0,
-    '♦': 1,
-    '♥': 2,
-    '♠': 3,
+    '♠': 0,
+    '♥': 1,
+    '♦': 2,
+    '♣': 3,
   };
   const rankIndex = rankValues[rank];
   const suitIndex = suitGroups[suit];
